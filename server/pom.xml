@@ -64,7 +64,7 @@
         <dependency>
             <groupId>org.eclipse.jetty.aggregate</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>8.0.4.v20111024</version>
+            <version>8.0.1.v20110908</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -82,8 +82,13 @@
         <dependency>
             <groupId>org.eclipse.jetty.aggregate</groupId>
             <artifactId>jetty-servlet</artifactId>
-            <version>8.0.4.v20111024</version>
+            <version>8.0.1.v20110908</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.2</version>
         </dependency>
     </dependencies>
     <properties>
