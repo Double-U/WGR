@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-Update dependencies</actionName>
+            <displayName>Update dependencies</displayName>
+            <goals>
+                <goal>versions:use-latest-versions</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-Ole</actionName>
+            <displayName>Ole</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>javadoc:jar</goal>
+                <goal>source:jar</goal>
+                <goal>install</goal>
+                <goal>deploy</goal>
+            </goals>
+        </action>
+    </actions>
