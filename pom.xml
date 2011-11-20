@@ -35,6 +35,10 @@
             <id>wr</id>
             <url>http://butters.double-u.co.cc:81/nexus/content/repositories/wr</url>
         </snapshotRepository>
+        <repository>
+            <id>releases</id>
+            <url>http://butters.double-u.co.cc:81/nexus/content/repositories/releases/</url>
+        </repository>
     </distributionManagement>
   
     <build>
