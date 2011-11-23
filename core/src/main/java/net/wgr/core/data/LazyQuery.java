@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import org.apache.cassandra.thrift.Column;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -17,17 +18,17 @@ import org.scale7.cassandra.pelops.Bytes;
 import org.scale7.cassandra.pelops.Selector;
 
 /**
- * Performs a query against a ColumnTable. Lazily.
+ * Performs a query against a ColumnTable with an Object based predicate. Lazily.
  * @created Aug 3, 2011
  * @author double-u
  */
-public class LazyQuery implements Runnable {
+public class LazyQuery<T> implements Runnable {
 
     protected int pageSize = 1000;
     protected String oldKey = "";
-    protected ArrayList<Matcher> matchers;
+    protected ArrayList<Matcher<T>> matchers;
     protected Strategy strategy;
-    protected Map<Bytes, List<Column>> results;
+    protected Map<Bytes, T> results;
     protected boolean run = false;
     protected String columnFamily;
 
@@ -38,7 +39,7 @@ public class LazyQuery implements Runnable {
         this.strategy = strategy;
     }
 
-    public void addMatcher(Matcher m) {
+    public void addMatcher(Matcher<T> m) {
         matchers.add(m);
     }
 
@@ -63,17 +64,21 @@ public class LazyQuery implements Runnable {
                     run = false;
                 }
 
+                mainIter:
+                // Loop over every row
                 for (Map.Entry<Bytes, List<Column>> entry : rows.entrySet()) {
-                    boolean matches = false;
-                    for (Matcher m : matchers) {
-                        if (m.match(entry.getValue())) {
-                            matches = true;
-                        }
-                    }
-                    if (matches) {
-                        results.put(entry.getKey(), entry.getValue());
-                        if (strategy == Strategy.FIND_ONE) {
-                            break;
+                    // Check if any matcher gives a match
+                    for (Matcher<T> m : matchers) {
+                        T object = m.buildInstance(entry.getValue());
+                        if (m.match(object)) {
+                            results.put(entry.getKey(), object);
+                            if (strategy == Strategy.FIND_ONE) {
+                                // We only need to find one, break outer loop
+                                // Also: using named for-loops :)
+                                break mainIter;
+                            } else {
+                                break;
+                            }
                         }
                     }
                 }
@@ -87,25 +92,18 @@ public class LazyQuery implements Runnable {
         run = false;
     }
 
-    public Map<Bytes, List<Column>> getResults() {
+    public Map<Bytes, T> getResults() {
         return results;
     }
 
-    public <T extends net.wgr.core.dao.Object> T getResultAs(Class<T> clazz) {
-        try {
-            if (results.isEmpty()) {
-                return null;
-            }
-            if (results.size() > 1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.WARN, "Only returning one result while multiple present");
-            }
-            T obj = clazz.newInstance();
-            obj.getFromColumns(results.entrySet().iterator().next().getValue());
-            return obj;
-        } catch (InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.ERROR, "Casting result failed");
+    public Entry<Bytes, T> getResult() {
+        if (results.size() < 1) {
+            return null;
         }
-        return null;
+        if (results.size() > 1) {
+            Logger.getLogger(getClass()).warn("Only returning one object when multiple are available");
+        }
+        return results.entrySet().iterator().next();
     }
 
     public enum Strategy {

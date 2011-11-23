@@ -14,7 +14,21 @@ import org.apache.cassandra.thrift.Column;
  * @created Aug 27, 2011
  * @author double-u
  */
-public interface Matcher {
+public interface Matcher<T> {
 
-    public boolean match(List<Column> columns);
+    /**
+     * Match the same or extending type
+     * @param <T> 
+     * @param object
+     * @return match 
+     */
+    public boolean match(T object);
+    
+    /**
+     * Get an instance of given type from the data
+     * @param <T> target type, which may extend Base type
+     * @param columns data
+     * @return T
+     */
+    public T buildInstance(List<Column> columns);
 }

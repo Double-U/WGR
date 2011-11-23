@@ -16,27 +16,24 @@ import org.apache.log4j.Logger;
  * @created Aug 27, 2011
  * @author double-u
  */
-public abstract class DAObjectMatcher<T extends net.wgr.core.dao.Object> implements Matcher {
-    
+public abstract class DAObjectMatcher<T extends net.wgr.core.dao.Object> implements Matcher<T> {
+
     protected Class<T> clazz;
-    
+
     public DAObjectMatcher(Class<T> clazz) {
         this.clazz = clazz;
     }
 
     @Override
-    public boolean match(List<Column> columns) {
+    public T buildInstance(List<Column> columns) {
         try {
             T obj = clazz.newInstance();
             obj.getFromColumns(columns);
-            return match(obj);
+            return obj;
         } catch (InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.ERROR, "Casting failed", ex);
         }
-        
-        return false;
+        return null;
+
     }
-    
-    public abstract boolean match(T object);
-    
 }
