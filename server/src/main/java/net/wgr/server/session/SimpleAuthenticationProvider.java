@@ -28,7 +28,7 @@ public class SimpleAuthenticationProvider extends AuthenticationProvider {
         // I like things salty
         md5.Update(".0f]$e" + password + "5f8&i");
         final String hash = md5.asHex();
-        LazyQuery lq = new LazyQuery("identities", LazyQuery.Strategy.FIND_ONE);
+        LazyQuery<User> lq = new LazyQuery("identities", LazyQuery.Strategy.FIND_ONE);
         lq.addMatcher(new DAObjectMatcher<User>(User.class) {
 
             @Override
@@ -37,7 +37,7 @@ public class SimpleAuthenticationProvider extends AuthenticationProvider {
             }
         });
         lq.run();
-        User result = lq.getResultAs(User.class);
+        User result = lq.getResult().getValue();
         if (result != null) {
             return createTicket(new Date(), result);
         }
