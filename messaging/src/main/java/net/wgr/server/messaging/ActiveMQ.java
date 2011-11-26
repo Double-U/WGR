@@ -20,6 +20,10 @@ public class ActiveMQ {
     private static boolean started;
     private static LocalMessaging lm;
     private static boolean ssl;
+    
+    private ActiveMQ() {
+        
+    }
 
     public static void startBroker() {
         if (started) {

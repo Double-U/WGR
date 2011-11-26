@@ -8,7 +8,6 @@ package net.wgr.wcp;
 
 import java.io.IOException;
 import java.util.UUID;
-import net.wgr.wcp.Connection;
 import net.wgr.server.messaging.ProtocolAgent;
 import net.wgr.server.messaging.ProtocolHandler;
 
@@ -40,7 +39,7 @@ public class MessagingConnection extends Connection {
         @Override
         public void handleMessageInChannel(String message, UUID client) {
             // Needs some fixing
-            if (MessagingConnection.this.client != client) {
+            if (!MessagingConnection.this.client.equals(client)) {
                 MessagingConnection.this.client = client;
                 Commander.getInstance().addConnection(MessagingConnection.this);
             }

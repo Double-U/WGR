@@ -64,7 +64,7 @@ public class LocalMessaging {
 
         @Override
         public void onException(JMSException exception) {
-            System.out.println("JMSException ocurred : " + exception.getMessage());
+            Logger.getLogger(getClass()).error("Exception occurred", exception);
         }
     }
 }

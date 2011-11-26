@@ -61,7 +61,7 @@ public class RemoteMessaging {
 
         @Override
         public void onException(JMSException exception) {
-            System.out.println("JMSException ocurred : " + exception.getMessage());
+            Logger.getLogger(getClass()).error("Exception occurred", exception);
         }
     }
 }
