@@ -4,6 +4,7 @@
  */
 package net.wgr.settings;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import net.wgr.data.XMLTree;
 
@@ -15,6 +16,11 @@ public class Settings extends XMLTree {
 
     private static Settings instance;
     private HashMap<String, String> deleted;
+
+    public Settings(InputStream stream) {
+        super(stream);
+        this.deleted = new HashMap<>();
+    }
 
     public Settings(String fileName) {
         super(fileName);
@@ -52,8 +58,14 @@ public class Settings extends XMLTree {
         return instance;
     }
     
-    public static void loadFromFile(String fileName) {
+    public static Settings loadFromFile(String fileName) {
         instance = new Settings(fileName);
+        return instance;
+    }
+    
+    public static Settings loadFromStream(InputStream stream) {
+        instance = new Settings(stream);
+        return instance;
     }
 
     public boolean settingExists(String settingName) {
