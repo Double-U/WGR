@@ -57,8 +57,8 @@ public abstract class Object {
                 try {
                     f.setAccessible(true);
 
-                    // It is the private fields we're after
-                    if (!Modifier.isPrivate(f.getModifiers())) {
+                    // It is the non-public fields we're after
+                    if (Modifier.isPublic(f.getModifiers())) {
                         continue;
                     }
                     

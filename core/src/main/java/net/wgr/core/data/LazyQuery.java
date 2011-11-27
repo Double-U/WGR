@@ -25,7 +25,7 @@ import org.scale7.cassandra.pelops.Selector;
 public class LazyQuery<T> implements Runnable {
 
     protected int pageSize = 1000;
-    protected String oldKey = "";
+    protected Bytes lastKey = Bytes.NULL;
     protected ArrayList<Matcher<T>> matchers;
     protected Strategy strategy;
     protected Map<Bytes, T> results;
@@ -50,11 +50,11 @@ public class LazyQuery<T> implements Runnable {
         while (run) {
             try {
                 Map<Bytes, List<Column>> rows = null;
-                if (oldKey.equals("")) {
+                if (lastKey.equals(Bytes.NULL)) {
                     rows = Retrieval.getRowsFromColumnFamily(columnFamily, pageSize);
                 } else {
-                    // We're just loading every column, even if we only needed one. Because we can. And we're lazy.
-                    rows = Retrieval.getRowsFromColumnFamily(columnFamily, Selector.newKeyRingRange(oldKey, "", pageSize));
+                    // Get new page
+                    rows = Retrieval.getRowsFromColumnFamily(columnFamily, Selector.newKeyRange(lastKey, Bytes.EMPTY, pageSize));
                 }
                 if (rows == null || rows.isEmpty()) {
                     break;
@@ -62,6 +62,8 @@ public class LazyQuery<T> implements Runnable {
 
                 if (rows.size() < pageSize) {
                     run = false;
+                } else {
+                    lastKey = (Bytes) new ArrayList<>(rows.keySet()).get(999);
                 }
 
                 mainIter:
