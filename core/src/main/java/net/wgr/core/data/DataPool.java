@@ -100,4 +100,8 @@ public class DataPool {
     public static String getKeyspace() {
         return keyspace;
     }
+
+    public static void stop() {
+        Pelops.shutdown();
+    }
 }

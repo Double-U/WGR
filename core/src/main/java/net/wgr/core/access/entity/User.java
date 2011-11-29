@@ -80,7 +80,7 @@ public class User extends net.wgr.core.dao.Object {
     }
 
     public static User getByUserName(String userName) {
-        LazyQuery<User> q = new LazyQuery(COLUMN_FAMILY, LazyQuery.Strategy.FIND_ONE);
+        LazyQuery<User> q = new LazyQuery(COLUMN_FAMILY, LazyQuery.ResultStrategy.FIND_ONE);
         q.addMatcher(new UserNameMatcher(userName));
         q.run();
 

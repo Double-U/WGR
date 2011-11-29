@@ -27,16 +27,23 @@ public class LazyQuery<T> implements Runnable {
     protected int pageSize = 1000;
     protected Bytes lastKey = Bytes.NULL;
     protected ArrayList<Matcher<T>> matchers;
-    protected Strategy strategy;
+    protected ResultStrategy resultStrategy;
+    protected MatchStrategy matchStrategy;
     protected Map<Bytes, T> results;
     protected boolean run = false;
     protected String columnFamily;
+    protected long limit;
 
-    public LazyQuery(String columnFamily, Strategy strategy) {
+    public LazyQuery(String columnFamily, ResultStrategy strategy, MatchStrategy matchStrategy) {
         matchers = new ArrayList<>();
         results = new HashMap<>();
         this.columnFamily = columnFamily;
-        this.strategy = strategy;
+        this.resultStrategy = strategy;
+        this.matchStrategy = matchStrategy;
+    }
+    
+    public LazyQuery(String columnFamily, ResultStrategy strategy) {
+        this(columnFamily, strategy, MatchStrategy.MATCH_ONE);
     }
 
     public void addMatcher(Matcher<T> m) {
@@ -46,6 +53,7 @@ public class LazyQuery<T> implements Runnable {
     @Override
     public void run() {
         run = true;
+        long count = 0;
 
         while (run) {
             try {
@@ -74,11 +82,16 @@ public class LazyQuery<T> implements Runnable {
                         T object = m.buildInstance(entry.getValue());
                         if (m.match(object)) {
                             results.put(entry.getKey(), object);
-                            if (strategy == Strategy.FIND_ONE) {
+                            count++;
+
+                            if (resultStrategy == ResultStrategy.FIND_ONE) {
                                 // We only need to find one, break outer loop
                                 // Also: using named for-loops :)
                                 break mainIter;
-                            } else {
+                            } else if (resultStrategy == ResultStrategy.LIMIT && count >= limit) {
+                                break mainIter;
+                            } else if (matchStrategy == MatchStrategy.MATCH_ONE) {
+                                // We only need one matcher to give a match
                                 break;
                             }
                         }
@@ -108,8 +121,32 @@ public class LazyQuery<T> implements Runnable {
         return results.entrySet().iterator().next();
     }
 
-    public enum Strategy {
+    public long getLimit() {
+        return limit;
+    }
 
-        FIND_ONE, FIND_ALL
+    /**
+     * Sets limit value and resultStrategy to LIMIT
+     */
+    public void setLimit(long limit) {
+        this.resultStrategy = ResultStrategy.LIMIT;
+        this.limit = limit;
+    }
+
+    public MatchStrategy getMatchStrategy() {
+        return matchStrategy;
+    }
+
+    public ResultStrategy getResultStrategy() {
+        return resultStrategy;
+    }
+
+    public enum ResultStrategy {
+
+        FIND_ONE, FIND_ALL, LIMIT
+    }
+    
+    public enum MatchStrategy {
+        MATCH_ONE, MATCH_ALL
     }
 }
