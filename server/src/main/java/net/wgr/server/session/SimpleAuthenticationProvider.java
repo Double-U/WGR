@@ -12,7 +12,6 @@ import net.wgr.core.access.AuthenticationProvider;
 import net.wgr.core.access.entity.User;
 import net.wgr.core.data.DAObjectMatcher;
 import net.wgr.core.data.LazyQuery;
-import net.wgr.server.session.Session;
 
 /**
  * 
@@ -28,7 +27,7 @@ public class SimpleAuthenticationProvider extends AuthenticationProvider {
         // I like things salty
         md5.Update(".0f]$e" + password + "5f8&i");
         final String hash = md5.asHex();
-        LazyQuery<User> lq = new LazyQuery("identities", LazyQuery.Strategy.FIND_ONE);
+        LazyQuery<User> lq = new LazyQuery("identities", LazyQuery.ResultStrategy.FIND_ONE);
         lq.addMatcher(new DAObjectMatcher<User>(User.class) {
 
             @Override

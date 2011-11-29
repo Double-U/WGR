@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.wgr.core.access.Authorize;
 import net.wgr.server.http.HttpExchange;
+import net.wgr.server.http.Server;
 import net.wgr.server.session.Session;
 import net.wgr.server.session.Sessions;
 import net.wgr.wcp.Command;
@@ -126,6 +127,11 @@ public class ServerHook {
         if (hook instanceof CommandHandler) {
             Commander.getInstance().addCommandHandler((CommandHandler) hook);
         }
+    }
+    
+    public void hookIntoServer(Server s) {
+        s.addServlet(getHttpHandler());
+        s.addServlet(getWebSocketHandler());
     }
 
     public class WebSocketHandler extends WebSocketServlet {
