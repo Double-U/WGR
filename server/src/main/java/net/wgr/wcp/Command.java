@@ -107,13 +107,17 @@ public class Command {
     protected static final class Result {
 
         public Object result;
-        public String tag;
+        public String tag, type;
         public static final String EXECUTION_FAILED = "command execution failed";
         public static final String NOT_AUTHORIZED = "I see what you did there";
+        
+        public static final String ERROR = "ERROR";
+        public static final String RESULT = "RESULT";
 
-        public Result(Object result, String tag) {
+        public Result(Object result, String tag, String type) {
             this.result = result;
             this.tag = tag;
+            this.type = type;
         }
     }
 }

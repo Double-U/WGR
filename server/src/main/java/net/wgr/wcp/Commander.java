@@ -103,11 +103,14 @@ public class Commander {
                 throw new IllegalArgumentException("Handler does not exist:" + cmd.getHandler());
             }
             Object result = cl.execute(cmd);
+            if (result instanceof Result) {
+                return (Result) result;
+            } 
             if (result == null) {
                 // Execution failed
-                return new Result(Result.EXECUTION_FAILED, cmd.getTag());
+                return new Result(Result.EXECUTION_FAILED, cmd.getTag(), Result.ERROR);
             } else {
-                return new Result(result, cmd.getTag());
+                return new Result(result, cmd.getTag(), Result.RESULT);
             }
         }
 

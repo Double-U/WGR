@@ -59,7 +59,7 @@ public abstract class Connection {
             if (Authorize.path("wcp:" + cmd.getHandler() + "/" + cmd.getName(), t)) {
                 sendResult(cal.executeCommand(cmd));
             } else {
-                sendResult(new Result(Result.NOT_AUTHORIZED, cmd.getTag()));
+                sendResult(new Result(Result.NOT_AUTHORIZED, cmd.getTag(), Result.ERROR));
             }
         } catch (IOException ex) {
             Logger.getLogger(Connection.class.getName()).log(Level.WARN, "Command handling failed", ex);
