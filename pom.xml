@@ -37,7 +37,7 @@
         </snapshotRepository>
         <repository>
             <id>releases</id>
-            <url>http://butters.double-u.co.cc:81/nexus/content/repositories/releases/</url>
+            <url>http://butters.double-u.co.cc:81/nexus/content/repositories/releases</url>
         </repository>
     </distributionManagement>
   
