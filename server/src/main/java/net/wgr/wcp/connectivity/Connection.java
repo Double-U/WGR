@@ -4,7 +4,7 @@
  * All rights reserved.
  * 
  */
-package net.wgr.wcp;
+package net.wgr.wcp.connectivity;
 
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -13,7 +13,9 @@ import net.wgr.core.access.AuthenticationProvider.Ticket;
 import net.wgr.core.access.Authorize;
 import net.wgr.server.session.Session;
 import net.wgr.server.session.Sessions;
-import net.wgr.wcp.Command.Result;
+import net.wgr.wcp.ConnectionActivityListener;
+import net.wgr.wcp.command.Command;
+import net.wgr.wcp.command.Result;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 

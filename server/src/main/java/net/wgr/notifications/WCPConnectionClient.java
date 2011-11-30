@@ -9,8 +9,8 @@ package net.wgr.notifications;
 import java.io.IOException;
 
 
-import net.wgr.wcp.Command;
-import net.wgr.wcp.Connection;
+import net.wgr.wcp.command.Command;
+import net.wgr.wcp.connectivity.Connection;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 

@@ -6,7 +6,9 @@
  */
 package net.wgr.wcp;
 
-import net.wgr.wcp.Command.Result;
+import net.wgr.wcp.command.Command;
+import net.wgr.wcp.connectivity.Connection;
+import net.wgr.wcp.command.Result;
 
 /**
  * 

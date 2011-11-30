@@ -6,7 +6,7 @@
  */
 package net.wgr.notifications;
 
-import net.wgr.wcp.Connection;
+import net.wgr.wcp.connectivity.Connection;
 import net.wgr.wcp.Scope;
 import java.util.List;
 import net.wgr.core.ElementsByProxyList;

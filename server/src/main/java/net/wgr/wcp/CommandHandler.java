@@ -6,6 +6,8 @@
  */
 package net.wgr.wcp;
 
+import net.wgr.wcp.command.Command;
+
 /**
  * 
  * @created Jul 7, 2011

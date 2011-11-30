@@ -4,7 +4,7 @@
  * All rights reserved.
  * 
  */
-package net.wgr.wcp;
+package net.wgr.wcp.command;
 
 /**
  * 

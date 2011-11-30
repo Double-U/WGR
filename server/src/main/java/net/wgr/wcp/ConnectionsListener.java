@@ -6,6 +6,8 @@
  */
 package net.wgr.wcp;
 
+import net.wgr.wcp.connectivity.Connection;
+
 /**
  * 
  * @created Jul 14, 2011

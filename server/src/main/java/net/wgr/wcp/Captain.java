@@ -6,6 +6,7 @@
  */
 package net.wgr.wcp;
 
+import net.wgr.wcp.command.Command;
 import java.util.ArrayList;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;

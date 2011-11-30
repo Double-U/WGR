@@ -4,11 +4,13 @@
  * All rights reserved.
  * 
  */
-package net.wgr.wcp;
+package net.wgr.wcp.connectivity;
 
+import net.wgr.wcp.connectivity.ServletConnection;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.wgr.wcp.command.Command;
 
 /**
  * 

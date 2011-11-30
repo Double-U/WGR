@@ -6,12 +6,14 @@
  */
 package net.wgr.wcp;
 
+import net.wgr.wcp.connectivity.Connection;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import net.wgr.core.ElementsByProxyList;
-import net.wgr.wcp.Command.Result;
+import net.wgr.wcp.command.Command;
+import net.wgr.wcp.command.Result;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -80,7 +82,7 @@ public class Commander {
                 break;
         }
     }
-    
+
     protected void sendMessageToConnection(String message, Connection c) {
         try {
             c.sendMessage(message);
@@ -104,8 +106,13 @@ public class Commander {
             }
             Object result = cl.execute(cmd);
             if (result instanceof Result) {
-                return (Result) result;
-            } 
+                Result r = (Result) result;
+                if (r.getType() == null || r.getType().isEmpty()) {
+                    throw new IllegalArgumentException("Result has no type");
+                }
+                r.setTag(cmd.getTag());
+                return r;
+            }
             if (result == null) {
                 // Execution failed
                 return new Result(Result.EXECUTION_FAILED, cmd.getTag(), Result.ERROR);

@@ -4,7 +4,7 @@
  * All rights reserved.
  * 
  */
-package net.wgr.wcp;
+package net.wgr.wcp.command;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -13,6 +13,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
+import net.wgr.wcp.connectivity.Connection;
 
 /**
  * 
@@ -102,22 +103,5 @@ public class Command {
         // This is stupid
         String json = "{\"data\":" + d + "," + command.substring(1);
         return json;
-    }
-
-    protected static final class Result {
-
-        public Object result;
-        public String tag, type;
-        public static final String EXECUTION_FAILED = "command execution failed";
-        public static final String NOT_AUTHORIZED = "I see what you did there";
-        
-        public static final String ERROR = "ERROR";
-        public static final String RESULT = "RESULT";
-
-        public Result(Object result, String tag, String type) {
-            this.result = result;
-            this.tag = tag;
-            this.type = type;
-        }
     }
 }
