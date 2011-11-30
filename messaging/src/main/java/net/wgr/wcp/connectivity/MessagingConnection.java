@@ -4,12 +4,14 @@
  * All rights reserved.
  * 
  */
-package net.wgr.wcp;
+package net.wgr.wcp.connectivity;
 
 import java.io.IOException;
 import java.util.UUID;
 import net.wgr.server.messaging.ProtocolAgent;
 import net.wgr.server.messaging.ProtocolHandler;
+import net.wgr.wcp.Commander;
+import net.wgr.wcp.command.Command;
 
 /**
  * W Messaging Command Protocol
