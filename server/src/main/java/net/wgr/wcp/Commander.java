@@ -116,6 +116,9 @@ public class Commander {
             if (result == null) {
                 // Execution failed
                 return new Result(Result.EXECUTION_FAILED, cmd.getTag(), Result.ERROR);
+            } else if (result instanceof Exception) {
+                Exception ex = (Exception) result;
+                return new Result(ex.getMessage(), cmd.getTag(), Result.ERROR);
             } else {
                 return new Result(result, cmd.getTag(), Result.RESULT);
             }
