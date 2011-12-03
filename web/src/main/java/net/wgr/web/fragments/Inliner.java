@@ -50,7 +50,7 @@ public class Inliner implements Handler.InlineListener {
 
         for (Map.Entry<String, InlineContentProvider> entry : icps.entrySet()) {
             if (entry.getKey().equals(parts[0])) {
-                String res = entry.getValue().getContentFor(parts[0], context, args);
+                String res = entry.getValue().getContentFor(parts[1], context, args);
                 if (res != null) {
                     return res;
                 }
