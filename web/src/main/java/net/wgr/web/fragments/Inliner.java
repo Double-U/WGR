@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
@@ -49,8 +48,8 @@ public class Inliner implements Handler.InlineListener {
         Collections.addAll(args, Arrays.copyOfRange(parts, 1, parts.length));
 
         for (Map.Entry<String, InlineContentProvider> entry : icps.entrySet()) {
-            if (entry.getKey().equals(parts[0])) {
-                String res = entry.getValue().getContentFor(parts[1], context, args);
+            if (entry.getKey().equals(str[0])) {
+                String res = entry.getValue().getContentFor(str[1], context, args);
                 if (res != null) {
                     return res;
                 }

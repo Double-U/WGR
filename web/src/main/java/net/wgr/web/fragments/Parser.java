@@ -21,17 +21,26 @@ import org.xml.sax.SAXException;
  * @author double-u
  */
 public class Parser {
+    
+    protected Handler handler;
+    
+    public Parser() {
+        this.handler = new Handler();
+        this.handler.addInlineListener(Fragments.get().buildInliner());
+    }
 
     public void parseStreaming(InputStream is, OutputStream os, Context context) {
         // HTML5 can violate XML correctness. It shouldn't, but hey, shit happens.
         HtmlParser hp = new HtmlParser(XmlViolationPolicy.ALLOW);
-        Handler h = new Handler(os);
-        h.setContext(context);
-        hp.setContentHandler(h);
+        // true streaming for max awesomeness
+        hp.setStreamabilityViolationPolicy(XmlViolationPolicy.FATAL);
+        handler.setOutput(os);
+        handler.setContext(context);
+        hp.setContentHandler(handler);
         try {
             //hp.setProperty("http://xml.org/sax/properties/lexical-handler", h);
             hp.parse(new InputSource(is));
-            h.end();
+            handler.end();
         } catch (IOException | SAXException ex) {
             Logger.getLogger(getClass()).error("HTML parsing failed", ex);
         }

@@ -11,7 +11,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Locale;
 import net.wgr.server.web.handling.WebHook;
 import net.wgr.settings.Settings;
 import org.apache.log4j.Logger;
