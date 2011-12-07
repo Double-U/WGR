@@ -9,6 +9,7 @@ package net.wgr.core;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +29,17 @@ public class ReflectionUtils {
             fields.addAll(Arrays.asList(getAllFields(clazz.getSuperclass())));
         }
         return fields.toArray(new Field[]{});
+    }
+    
+    public static Method[] getAllMethods(Class clazz) {
+        ArrayList<Method> methods = new ArrayList<>();
+        if (clazz != null) methods.addAll(Arrays.asList(clazz.getDeclaredMethods()));
+        Class parent = clazz.getSuperclass();
+        while (parent != null) {
+            methods.addAll(Arrays.asList(parent.getDeclaredMethods()));
+            parent = parent.getSuperclass();
+        }
+        return methods.toArray(new Method[0]);
     }
     
     /**
