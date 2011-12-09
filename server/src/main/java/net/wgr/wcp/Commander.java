@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 import net.wgr.core.ElementsByProxyList;
 import net.wgr.wcp.command.Command;
+import net.wgr.wcp.command.CommandException;
 import net.wgr.wcp.command.Result;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -119,6 +120,8 @@ public class Commander {
             } else if (result instanceof Exception) {
                 Exception ex = (Exception) result;
                 return new Result(ex.getMessage(), cmd.getTag(), Result.ERROR);
+            } else if (result instanceof CommandException) {
+                return new Result(result, cmd.getTag(), Result.ERROR);
             } else {
                 return new Result(result, cmd.getTag(), Result.RESULT);
             }
