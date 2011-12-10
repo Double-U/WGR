@@ -5,8 +5,6 @@
 
 package net.wgr.server.http;
 
-import java.io.IOException;
-
 /**
  *
  * @author DoubleU
