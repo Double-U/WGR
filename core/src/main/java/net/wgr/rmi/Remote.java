@@ -262,7 +262,7 @@ public final class Remote implements Serializable {
                         sendResult(res);
 
                         handled = true;
-                    } catch (Throwable ex) {
+                    } catch (Exception ex) {
                         System.out.println("Invocation target exception on method:" + cmd.getMethodName());
                         try {
                             sendResult(ex);

@@ -146,6 +146,7 @@ public abstract class Object {
                     if (f.getName().equals(this.getKeyFieldName())) {
                         if (!nc.value.hasArray()) {
                             // Uhm ... ok, now what?
+                            Logger.getLogger(getClass()).warn("Illegal key field value");
                         } else {
                             keyFieldValue = nc.getValue();
                         }
