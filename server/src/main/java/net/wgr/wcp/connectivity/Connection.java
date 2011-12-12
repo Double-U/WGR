@@ -7,7 +7,14 @@
 package net.wgr.wcp.connectivity;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.UUID;
 import net.wgr.core.access.AuthenticationProvider.Ticket;
 import net.wgr.core.access.Authorize;
@@ -40,7 +47,9 @@ public abstract class Connection {
     }
 
     public Connection() {
-        this.gson = new Gson();
+        GsonBuilder gb = new GsonBuilder();
+        gb.registerTypeAdapter(Object.class, new ArraySerializer());
+        this.gson = gb.create();
     }
 
     public UUID getId() {
@@ -54,7 +63,7 @@ public abstract class Connection {
         try {
             Session s = Sessions.getInstance().getSessionByWCPConnectionId(cmd.getConnection().getId());
             Ticket t = null;
-            
+
             if (s != null) {
                 t = s.getTicket() != null ? s.getTicket() : null;
             }
@@ -82,5 +91,28 @@ public abstract class Connection {
 
     public void coupleToSession(String sessionId) {
         Sessions.getInstance().getSession(sessionId).setWCPConnectionId(this.id);
+    }
+
+    // Gson really needs some work done
+    static class ArraySerializer implements JsonSerializer<Object> {
+
+        public JsonElement serialize(final Object src, final Type typeOfSrc, final JsonSerializationContext context) {
+            if (src == null) {
+                return new JsonNull();
+            }
+            if (!src.getClass().isArray()) {
+                return context.serialize(src);
+            }
+
+            JsonArray result = new JsonArray();
+            for (Object el : (Object[]) src) {
+                if (el == null) {
+                    result.add(new JsonNull());
+                } else {
+                    result.add(context.serialize(el, el.getClass()));
+                }
+            }
+            return result;
+        }
     }
 }
