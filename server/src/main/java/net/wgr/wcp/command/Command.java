@@ -27,6 +27,7 @@ public class Command {
     protected transient JsonElement data;
     protected HttpServletRequest request;
     protected Connection conn;
+    protected static Gson gson = new Gson();
 
     public static Command parse(String data, Connection c) {
         JsonParser jp = new JsonParser();
@@ -47,9 +48,15 @@ public class Command {
     public Command(String handler, String name, Object data) {
         this.handler = handler;
         this.name = name;
-        Gson gson = new Gson();
         this.data = gson.toJsonTree(data);
         this.tag = UUID.randomUUID().toString();
+    }
+
+    public Command(String handler, String name, String tag, Object data) {
+        this.handler = handler;
+        this.name = name;
+        this.data = gson.toJsonTree(data);
+        this.tag = tag;
     }
 
     public Command(String handler, String name, String tag, JsonElement data, Connection c) {
@@ -97,7 +104,6 @@ public class Command {
      * @return a properly serialized Command
      */
     public String toJson() {
-        Gson gson = new Gson();
         String command = gson.toJson(this);
         String d = data.toString();
         // This is stupid
