@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 public class I18N {
 
     protected Map<String, Properties> locales;
+    protected Locale defaultLocale;
     private static I18N instance;
 
     private I18N() {
@@ -33,6 +34,14 @@ public class I18N {
             instance = new I18N();
         }
         return instance;
+    }
+
+    public Locale getDefaultLocale() {
+        return defaultLocale;
+    }
+
+    public void setDefaultLocale(Locale defaultLocale) {
+        this.defaultLocale = defaultLocale;
     }
 
     public void loadLocaleFromStream(InputStream is, Locale locale) throws IOException {
@@ -56,8 +65,12 @@ public class I18N {
             }
         }
     }
+    
+    public String getText(String key) {
+        return getTextForLocale(key, defaultLocale);
+    }
 
-    public String getStringForLocale(String key, Locale locale) {
+    public String getTextForLocale(String key, Locale locale) {
         if (!locales.containsKey(locale.getLanguage()) || !locales.get(locale.getLanguage()).containsKey(key)) {
             return null;
         } else {
