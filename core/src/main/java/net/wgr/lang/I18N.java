@@ -27,6 +27,7 @@ public class I18N {
 
     private I18N() {
         locales = new HashMap<>();
+        defaultLocale = Locale.ENGLISH;
     }
 
     public static I18N get() {
