@@ -14,7 +14,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import org.apache.log4j.Logger;
 
 /**
  * 
@@ -22,6 +25,10 @@ import java.util.List;
  * @author double-u
  */
 public class ReflectionUtils {
+
+    private ReflectionUtils() {
+    }
+
     public static Field[] getAllFields(Class clazz) {
         List<Field> fields = new ArrayList<>();
         fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
@@ -30,10 +37,12 @@ public class ReflectionUtils {
         }
         return fields.toArray(new Field[]{});
     }
-    
+
     public static Method[] getAllMethods(Class clazz) {
         ArrayList<Method> methods = new ArrayList<>();
-        if (clazz != null) methods.addAll(Arrays.asList(clazz.getDeclaredMethods()));
+        if (clazz != null) {
+            methods.addAll(Arrays.asList(clazz.getDeclaredMethods()));
+        }
         Class parent = clazz.getSuperclass();
         while (parent != null) {
             methods.addAll(Arrays.asList(parent.getDeclaredMethods()));
@@ -41,7 +50,7 @@ public class ReflectionUtils {
         }
         return methods.toArray(new Method[0]);
     }
-    
+
     /**
      * Scans all classes accessible from the context class loader which belong to the given package and subpackages.
      * Based on: http://snippets.dzone.com/posts/show/4831
@@ -68,6 +77,7 @@ public class ReflectionUtils {
         }
         return classes;
     }
+
     /**
      * Recursive method used to find all classes in a given directory and subdirs.
      *
@@ -92,5 +102,33 @@ public class ReflectionUtils {
         }
         return classes;
     }
-    
+
+    /**
+     * Returns difference between instances
+     * @param <T> instance type
+     * @param original 
+     * @param changed 
+     * @return <fieldName, value>
+     */
+    public static <T> Map<String, Object> diff(T original, T changed) {
+        if (original == null || changed == null) {
+            throw new IllegalArgumentException("Original and/or changed object were null");
+        }
+        
+        HashMap<String, Object> result = new HashMap<>();
+        for (Field f : getAllFields(original.getClass())) {
+            f.setAccessible(true);
+            try {
+                Object origVal = f.get(original);
+                Object newVal = f.get(changed);
+                
+                if ((origVal == null && newVal != null) || (origVal != null && !origVal.equals(newVal))) {
+                    result.put(f.getName(), newVal);
+                }
+            } catch (IllegalArgumentException | IllegalAccessException ex) {
+                Logger.getLogger(ReflectionUtils.class).error("Failed to reflect properly", ex);
+            }
+        }
+        return result;
+    }
 }

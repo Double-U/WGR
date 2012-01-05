@@ -44,6 +44,10 @@ public class I18N {
     public void setDefaultLocale(Locale defaultLocale) {
         this.defaultLocale = defaultLocale;
     }
+    
+    public boolean hasLocale(Locale locale) {
+        return locales.containsKey(locale.getLanguage());
+    }
 
     public void loadLocaleFromStream(InputStream is, Locale locale) throws IOException {
         Properties prop = new Properties();
