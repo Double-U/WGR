@@ -111,18 +111,29 @@ public class ReflectionUtils {
      * @return <fieldName, value>
      */
     public static <T> Map<String, Object> diff(T original, T changed) {
-        if (original == null || changed == null) {
-            throw new IllegalArgumentException("Original and/or changed object were null");
+        if (original == null && changed == null) {
+            throw new IllegalArgumentException("Original and changed object were null");
+        }
+
+        boolean addAll = false;
+        if (original == null) {
+            addAll = true;
+            original = changed;
         }
         
+        if (changed == null) {
+            addAll = true;
+            changed = original;
+        }
+
         HashMap<String, Object> result = new HashMap<>();
         for (Field f : getAllFields(original.getClass())) {
             f.setAccessible(true);
             try {
                 Object origVal = f.get(original);
                 Object newVal = f.get(changed);
-                
-                if ((origVal == null && newVal != null) || (origVal != null && !origVal.equals(newVal))) {
+
+                if (addAll || (origVal == null && newVal != null) || (origVal != null && !origVal.equals(newVal))) {
                     result.put(f.getName(), newVal);
                 }
             } catch (IllegalArgumentException | IllegalAccessException ex) {
