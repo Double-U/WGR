@@ -33,6 +33,7 @@ public class I18N {
     public static I18N instance() {
         if (instance == null) {
             instance = new I18N();
+            instance.loadLocale(instance.getDefaultLocale());
         }
         return instance;
     }
@@ -77,6 +78,15 @@ public class I18N {
     
     public static String getText(String key) {
         return instance().getTextWithDefaultLocale(key);
+    }
+    
+    public boolean hasTextWithDefaultLocale(String key) {
+        if (!locales.containsKey(defaultLocale.getLanguage())) return false;
+        return locales.get(defaultLocale.getLanguage()).containsKey(key);
+    }
+    
+    public static boolean hasText(String key) {
+        return instance().hasTextWithDefaultLocale(key);
     }
 
     public String getTextForLocale(String key, Locale locale) {
