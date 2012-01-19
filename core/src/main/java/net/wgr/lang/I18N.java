@@ -30,7 +30,7 @@ public class I18N {
         defaultLocale = Locale.ENGLISH;
     }
 
-    public static I18N get() {
+    public static I18N instance() {
         if (instance == null) {
             instance = new I18N();
         }
@@ -71,8 +71,12 @@ public class I18N {
         }
     }
     
-    public String getText(String key) {
+    public String getTextWithDefaultLocale(String key) {
         return getTextForLocale(key, defaultLocale);
+    }
+    
+    public static String getText(String key) {
+        return instance().getTextWithDefaultLocale(key);
     }
 
     public String getTextForLocale(String key, Locale locale) {
