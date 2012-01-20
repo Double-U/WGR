@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -128,6 +129,9 @@ public class ReflectionUtils {
 
         HashMap<String, Object> result = new HashMap<>();
         for (Field f : getAllFields(original.getClass())) {
+            
+            if (Modifier.isTransient(f.getModifiers())) continue;
+            
             f.setAccessible(true);
             try {
                 Object origVal = f.get(original);
