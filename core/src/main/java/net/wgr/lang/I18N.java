@@ -59,7 +59,7 @@ public class I18N {
     protected void loadLocale(Locale locale) {
         if (!locales.containsKey(locale.getLanguage())) {
             // Try to load
-            InputStream is = getClass().getResourceAsStream("/lang_" + locale.getLanguage());
+            InputStream is = getClass().getResourceAsStream("/lang_" + locale.getLanguage() + ".properties");
             if (is == null) {
                 Logger.getLogger(getClass()).error("Failed to find localization file for language " + locale.getLanguage());
             } else {
