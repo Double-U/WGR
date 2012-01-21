@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import net.wgr.core.ReflectionUtils;
+import net.wgr.core.dao.TypeOverride;
 import net.wgr.core.dao.TimeUUID;
 import org.apache.cassandra.thrift.CfDef;
 import org.apache.cassandra.thrift.Column;
@@ -37,20 +38,25 @@ public class ColumnFamily {
         cfd.setDefault_validation_class("UTF8Type");
         for (Field f : ReflectionUtils.getAllFields(obj.getClass())) {
             String type = "";
-            if (f.getType().isAssignableFrom(UUID.class)) {
-                if (f.isAnnotationPresent(TimeUUID.class)) {
-                    type = "TimeUUIDType";
-                } else {
-                    type = "LexicalUUIDType";
-                }
-            } else if (Map.class.isAssignableFrom(f.getType())) {
-                type = "Super";
-            } else if (f.getType().isAssignableFrom(String.class)) {
-                type = "UTF8Type";
-            } else if (f.getType() == long.class) {
-                type = "LongType";
+
+            if (f.isAnnotationPresent(TypeOverride.class)) {
+                type = f.getAnnotation(TypeOverride.class).type();
             } else {
-                type = "BytesType";
+                if (f.getType().isAssignableFrom(UUID.class)) {
+                    if (f.isAnnotationPresent(TimeUUID.class)) {
+                        type = "TimeUUIDType";
+                    } else {
+                        type = "LexicalUUIDType";
+                    }
+                } else if (Map.class.isAssignableFrom(f.getType())) {
+                    type = "Super";
+                } else if (f.getType().isAssignableFrom(String.class)) {
+                    type = "UTF8Type";
+                } else if (f.getType() == long.class) {
+                    type = "LongType";
+                } else {
+                    type = "BytesType";
+                }
             }
 
             if (f.getName().equals(obj.getKeyFieldName())) {
