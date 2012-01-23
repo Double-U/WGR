@@ -37,7 +37,7 @@ public class Fragments {
 
     public void loadFromPackage(String packageName) throws ClassNotFoundException {
         try {
-            List<Class> classes = ReflectionUtils.getClasses(packageName);
+            List<Class> classes = ReflectionUtils.getClasses(packageName, getClass());
             for (Class clazz : classes) {
                 if (InlineContentProvider.class.isAssignableFrom(clazz)) classes.add(clazz);
             }
