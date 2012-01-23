@@ -57,7 +57,7 @@ public class Server {
         }
 
 
-        Logger.getLogger(getClass()).info("W - Server booted");
+        Logger.getLogger(getClass()).info("Server booted");
     }
 
     public void start() {
@@ -68,7 +68,7 @@ public class Server {
         try {
             server.start();
         } catch (Exception ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.ERROR, null, ex);
+            Logger.getLogger(Server.class.getName()).log(Level.ERROR, "Failed to start server", ex);
         }
         started = true;
         Logger.getLogger(getClass()).info("Server started -- " + isa.getHostName() + ":" + isa.getPort());
