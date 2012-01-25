@@ -16,21 +16,28 @@ import org.eclipse.jetty.websocket.WebSocket;
  * @author double-u
  */
 public class WebSocketConnection extends ServletConnection {
-    
+
     private org.eclipse.jetty.websocket.WebSocket.Connection conn;
 
     public WebSocketConnection(HttpServletRequest request, WebSocket.Connection conn) {
         super(request);
         this.conn = conn;
     }
- 
+
     @Override
     public void sendMessage(String data) throws IOException {
-        conn.sendMessage(data);
+        try {
+            conn.sendMessage(data);
+        } catch (IOException ex) {
+            if (!conn.isOpen()) {
+                close();
+            } else {
+                throw ex;
+            }
+        }
     }
 
     public void close() {
         cal.connectionClosed(this);
     }
-
 }
