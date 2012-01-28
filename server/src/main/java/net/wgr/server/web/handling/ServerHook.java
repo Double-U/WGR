@@ -92,7 +92,7 @@ public class ServerHook {
         WebHook designatedHook = null;
 
         for (WebHook ph : hooks) {
-            if (ph.getSelector().equals("*")) {
+            if (ph.getSelector().equals("*") && designatedHook == null) {
                 highestMatch = 0;
                 designatedHook = ph;
             }
