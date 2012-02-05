@@ -105,7 +105,7 @@ public class Command {
      */
     public String toJson() {
         String command = gson.toJson(this);
-        String d = data.toString();
+        String d = gson.toJson(data);
         // This is stupid
         String json = "{\"data\":" + d + "," + command.substring(1);
         return json;
