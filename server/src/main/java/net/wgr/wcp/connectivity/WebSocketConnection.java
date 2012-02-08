@@ -29,11 +29,10 @@ public class WebSocketConnection extends ServletConnection {
         try {
             conn.sendMessage(data);
         } catch (IOException ex) {
-            if (!conn.isOpen()) {
-                close();
-            } else {
-                throw ex;
+            if (conn.isOpen()) {
+                conn.disconnect();
             }
+            close();
         }
     }
 
