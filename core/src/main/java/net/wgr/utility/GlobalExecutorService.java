@@ -8,6 +8,8 @@ package net.wgr.utility;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 
@@ -16,10 +18,18 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
  */
 public class GlobalExecutorService {
     private static ScheduledExecutorService ses;
+    private static AtomicInteger counter = new AtomicInteger();
 
     public static ScheduledExecutorService get() {
         if (ses == null) {
-            ses = new ScheduledThreadPoolExecutor(1);
+            ses = new ScheduledThreadPoolExecutor(2, new ThreadFactory() {
+
+                @Override
+                public Thread newThread(Runnable r) {
+                    Thread t = new Thread(r, "SES-" + counter.incrementAndGet());
+                    return t;
+                }
+            });
         }
         return ses;
     }
