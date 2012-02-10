@@ -8,9 +8,9 @@ package net.wgr.wcp;
 
 import net.wgr.wcp.connectivity.Connection;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 import net.wgr.core.ElementsByProxyList;
 import net.wgr.wcp.command.Command;
 import net.wgr.wcp.command.CommandException;
@@ -26,13 +26,13 @@ import org.apache.log4j.Logger;
 public class Commander {
 
     private static Commander instance;
-    protected List<Connection> connections;
+    protected final List<Connection> connections;
     protected ElementsByProxyList<CommandHandler> handlers;
     protected ElementsByProxyList<ConnectionsListener> connectionListeners;
 
     private Commander() {
         this.handlers = new ElementsByProxyList<>();
-        this.connections = new ArrayList<>();
+        this.connections = new CopyOnWriteArrayList<>();
         this.connectionListeners = new ElementsByProxyList<>();
         this.connectionListeners.enable(ConnectionsListener.class);
     }
@@ -65,7 +65,6 @@ public class Commander {
 
     public void commandeer(Command cmd, Scope scope) {
         String json = cmd.toJson();
-
         switch (scope.getTarget()) {
             case ALL:
                 for (Connection c : connections) {
