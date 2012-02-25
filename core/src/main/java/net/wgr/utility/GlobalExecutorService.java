@@ -10,6 +10,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.apache.log4j.Logger;
 
 /**
  * 
@@ -27,6 +28,13 @@ public class GlobalExecutorService {
                 @Override
                 public Thread newThread(Runnable r) {
                     Thread t = new Thread(r, "SES-" + counter.incrementAndGet());
+                    t.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+
+                        @Override
+                        public void uncaughtException(Thread t, Throwable e) {
+                            Logger.getLogger(getClass()).error("Unhandled error in thread " + t.getName(), e);
+                        }
+                    });
                     return t;
                 }
             });
