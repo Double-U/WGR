@@ -23,6 +23,10 @@ public class WebSocketConnection extends ServletConnection {
         super(request);
         this.conn = conn;
     }
+    
+    public WebSocket.Connection getTransport() {
+        return conn;
+    }
 
     @Override
     public void sendMessage(String data) throws IOException {

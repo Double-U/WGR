@@ -6,6 +6,7 @@
  */
 package net.wgr.wcp;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +25,12 @@ public class Scope {
 
     public Scope(Target target) {
         this.target = target;
+    }
+    
+    public Scope(UUID id) {
+        target = Target.BY_ID;
+        this.ids = new ArrayList<>();
+        this.ids.add(id);
     }
     
     public Scope(List<UUID> ids) {
