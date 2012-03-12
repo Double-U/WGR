@@ -10,6 +10,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.Collections;
 import org.apache.commons.net.util.SubnetUtils;
 import org.apache.log4j.Logger;
@@ -20,9 +21,13 @@ import org.apache.log4j.Logger;
  * @author double-u
  */
 public class Network {
+    
+    public static String LOCALHOST = "127.0.0.1";
 
     public static InetAddress getHostAddressInSubnet(String address, String mask) {
         try {
+            if (address.equals(LOCALHOST)) return InetAddress.getLocalHost();
+            
             SubnetUtils utils = new SubnetUtils(address, mask);
             nics:
             for (NetworkInterface nic : Collections.list(NetworkInterface.getNetworkInterfaces())) {
@@ -35,7 +40,7 @@ public class Network {
                 }
             }
 
-        } catch (SocketException ex) {
+        } catch (UnknownHostException | SocketException ex) {
             Logger.getLogger(Network.class).error("Failed to find corresponding interface", ex);
         }
         return null;
