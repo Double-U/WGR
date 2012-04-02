@@ -134,6 +134,9 @@ public class DefaultApplication implements Application {
     private DefaultApplication(String path, String rootFolder) {
         this.path = path;
         this.root = rootFolder;
+        
+        // End extraneous logging
+        Logger.getLogger("net.sf.jmimemagic").setLevel(Level.ERROR);
     }
 
     public static DefaultApplication create(String path, String rootFolder) throws IOException {
