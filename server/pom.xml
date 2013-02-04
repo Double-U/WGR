@@ -78,7 +78,7 @@
         <dependency>
             <groupId>org.eclipse.jetty.aggregate</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>8.1.8.v20121106</version>
+            <version>8.1.9.v20130131</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -96,7 +96,7 @@
         <dependency>
             <groupId>org.eclipse.jetty.aggregate</groupId>
             <artifactId>jetty-servlet</artifactId>
-            <version>8.1.8.v20121106</version>
+            <version>8.1.9.v20130131</version>
             <type>jar</type>
         </dependency>
         <dependency>

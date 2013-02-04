@@ -27,7 +27,7 @@ public class FragmentHook extends WebHook {
 
     public FragmentHook() {
         super("*");
-        parser = Fragments.get().buildParser();
+        //  REM parser = Fragments.get().buildParser();
         context = new Context();
     }
 

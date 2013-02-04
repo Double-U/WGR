@@ -98,7 +98,7 @@ public class Handler extends DefaultHandler {
                 if (attributes.getLength() == 0 || (attributes.getValue("build") != null && attributes.getValue("build").equals("yes"))) {
                     action = Action.WRITE_ON_END_ELEMENT;
                 } else if (attributes.getValue("default") != null) {
-                    inlineData.putAll(Fragments.get().getPartsFromFragment(attributes.getValue("default"), output, context));
+                    // REM inlineData.putAll(Fragments.get().getPartsFromFragment(attributes.getValue("default"), output, context));
                 }
 
                 if (attributes.getValue("name") != null) {
