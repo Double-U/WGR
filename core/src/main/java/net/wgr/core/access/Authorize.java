@@ -8,9 +8,9 @@ package net.wgr.core.access;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import net.wgr.core.access.entity.Rule;
 import java.util.Map;
 import java.util.UUID;
+import net.wgr.core.access.entity.Rule;
 import net.wgr.core.access.entity.Rule.Action;
 import net.wgr.core.data.Retrieval;
 import org.apache.log4j.Level;

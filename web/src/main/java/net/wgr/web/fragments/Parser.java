@@ -9,6 +9,7 @@ package net.wgr.web.fragments;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Map;
 import nu.validator.htmlparser.common.XmlViolationPolicy;
 import nu.validator.htmlparser.sax.HtmlParser;
 import org.apache.log4j.Logger;
@@ -30,7 +31,7 @@ public class Parser {
     }
 
     public void parseStreaming(InputStream is, OutputStream os, Context context) {
-        // HTML5 can violate XML correctness. It shouldn't, but hey, shit happens.
+        // HTML5 may violate XML correctness. It shouldn't, but hey, shit happens.
         HtmlParser hp = new HtmlParser(XmlViolationPolicy.ALLOW);
         // true streaming for max awesomeness
         hp.setStreamabilityViolationPolicy(XmlViolationPolicy.FATAL);
@@ -38,11 +39,28 @@ public class Parser {
         handler.setContext(context);
         hp.setContentHandler(handler);
         try {
-            //hp.setProperty("http://xml.org/sax/properties/lexical-handler", h);
             hp.parse(new InputSource(is));
             handler.end();
         } catch (IOException | SAXException ex) {
             Logger.getLogger(getClass()).error("HTML parsing failed", ex);
         }
+    }
+    
+     public Map<String, String> getFragmentParts(InputStream is, Context context) {
+        // HTML5 may violate XML correctness. It shouldn't, but hey, shit happens.
+        HtmlParser hp = new HtmlParser(XmlViolationPolicy.FATAL);
+        // true streaming for max awesomeness
+        hp.setStreamabilityViolationPolicy(XmlViolationPolicy.FATAL);
+        
+        handler.setAction(Handler.Action.EXTRACT_INLINE_PARTS);
+        handler.setContext(context);
+        handler.doNotWriteDocumentStart();
+        hp.setContentHandler(handler);
+        try {
+            hp.parse(new InputSource(is));
+        } catch (IOException | SAXException ex) {
+            Logger.getLogger(getClass()).error("HTML parsing failed", ex);
+        }
+        return handler.getFragmentParts();
     }
 }

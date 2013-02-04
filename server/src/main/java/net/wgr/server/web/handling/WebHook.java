@@ -13,7 +13,6 @@ import net.wgr.core.access.AuthenticationProvider.Ticket;
 import net.wgr.server.http.HttpExchange;
 import net.wgr.server.session.Sessions;
 import org.apache.commons.io.IOUtils;
-import org.eclipse.jetty.server.Request;
 
 /**
  * 
@@ -38,13 +37,8 @@ public abstract class WebHook {
         protected byte[] requestBody;
 
         public RequestBundle(HttpServletRequest request, HttpServletResponse response, String[] pathParts) {
-            super(null, request, response);
+            super(request, response);
             this.pathParts = pathParts.clone();
-        }
-
-        @Override
-        public Request getBaseRequest() {
-            return Request.getRequest(getRequest());
         }
         
         public String[] getPathParts() {

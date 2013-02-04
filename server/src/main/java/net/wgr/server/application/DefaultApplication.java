@@ -13,6 +13,10 @@ import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.zip.Deflater;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import net.sf.jmimemagic.Magic;
 import net.sf.jmimemagic.MagicException;
 import net.sf.jmimemagic.MagicMatch;
@@ -134,7 +138,7 @@ public class DefaultApplication implements Application {
     private DefaultApplication(String path, String rootFolder) {
         this.path = path;
         this.root = rootFolder;
-        
+
         // End extraneous logging
         Logger.getLogger("net.sf.jmimemagic").setLevel(Level.ERROR);
     }
@@ -163,14 +167,8 @@ public class DefaultApplication implements Application {
             byte[] deflated = new byte[file.length];
             deflater.setInput(file);
             deflater.finish();
-            file = new byte[deflater.deflate(deflated)];
-            file = deflated;
 
             he.setResponseHeader("Content-Encoding", "deflate");
-
-            //DeflaterOutputStream dos = new DeflaterOutputStream(he.getResponseBody());
-            //dos.write(file);
-
             return deflated;
         } else {
             return file;
@@ -203,7 +201,7 @@ public class DefaultApplication implements Application {
                 } else {
                     requestURI = he.getRequestURI();
                 }
-                
+
                 if (requestURI.equals("/") && searchForIndex) {
                     requestURI += "index.html";
                 }
@@ -222,7 +220,7 @@ public class DefaultApplication implements Application {
                     return;
                 }
 
-                Session session = Sessions.getInstance().getSession(he.getBaseRequest().getSession().getId());
+                Session session = Sessions.getInstance().getSession(he.getRequest().getSession().getId());
                 boolean authorized = false;
                 if (session != null) {
                     authorized = Authorize.path(requestURI, session.getTicket());
@@ -236,8 +234,6 @@ public class DefaultApplication implements Application {
                     he.close();
                     return;
                 }
-
-                he.getBaseRequest().setHandled(true);
 
                 if (Settings.getInstance().enable("Caching.Enabled") && he.getRequest().getHeader("If-Modified-Since") != null) {
                     long lms = HttpFields.parseDate(he.getRequestHeader("If-Modified-Since"));

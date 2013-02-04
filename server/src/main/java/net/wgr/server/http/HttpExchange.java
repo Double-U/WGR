@@ -25,10 +25,9 @@ public class HttpExchange {
     private HttpServletResponse response;
     private Request baseRequest;
 
-    public HttpExchange(Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
+    public HttpExchange(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
-        this.baseRequest = baseRequest;
     }
 
     public HttpExchange(HttpServletRequest request) {
@@ -85,6 +84,6 @@ public class HttpExchange {
     }
 
     public Request getBaseRequest() {
-        return baseRequest;
+        return Request.getRequest(request);
     }
 }

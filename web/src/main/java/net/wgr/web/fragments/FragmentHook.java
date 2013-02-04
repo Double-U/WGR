@@ -27,7 +27,7 @@ public class FragmentHook extends WebHook {
 
     public FragmentHook() {
         super("*");
-        parser = new Parser();
+        parser = Fragments.get().buildParser();
         context = new Context();
     }
 
@@ -44,9 +44,9 @@ public class FragmentHook extends WebHook {
         }
 
         Settings s = Settings.getInstance();
-        String fragmentPath = s.getString("WebContentPath") + '/' + s.getString("FragmentsPath") + '/' + (uri.getPath().isEmpty() || uri.getPath().equals("/") ? "index.html" : uri.getPath());
+        String fragmentPath = s.getString("WebContentPath") + '/' + s.getString("FragmentsPath") + '/' + (uri.getPath().isEmpty() || uri.getPath().equals("/") ? "index.xhtml" : uri.getPath());
         File f = new File(fragmentPath);
-        if (!fragmentPath.endsWith(".html") || !f.exists()) {
+        if (!fragmentPath.endsWith(".xhtml") || !f.exists()) {
             rb.getBaseRequest().setHandled(false);
             return;
         }

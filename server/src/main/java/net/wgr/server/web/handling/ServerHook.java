@@ -12,13 +12,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.wgr.core.access.Authorize;
+import net.wgr.server.application.DefaultApplication;
 import net.wgr.server.http.HttpExchange;
 import net.wgr.server.http.Server;
 import net.wgr.server.session.Session;
 import net.wgr.server.session.Sessions;
-import net.wgr.wcp.command.Command;
 import net.wgr.wcp.CommandHandler;
 import net.wgr.wcp.Commander;
+import net.wgr.wcp.command.Command;
 import net.wgr.wcp.connectivity.HttpConnection;
 import net.wgr.wcp.connectivity.WebSocketConnection;
 import org.apache.commons.io.IOUtils;
@@ -37,6 +38,7 @@ public class ServerHook {
 
     protected List<WebHook> hooks;
     protected String context;
+    protected DefaultApplication app;
 
     public class HttpHandler extends HttpServlet implements net.wgr.server.http.ServerHook {
 
@@ -50,15 +52,16 @@ public class ServerHook {
             HttpExchange he = new WebHook.RequestBundle(req, resp, req.getPathInfo().split("/"));
 
             String[] requestParts = he.getRequestURI().toString().split("/");
-            WebHook.RequestBundle rb = new WebHook.RequestBundle(he.getRequest(), he.getResponse(), (String[]) ArrayUtils.subarray(requestParts, 2, 1000));
-            rb.getBaseRequest().setHandled(false);
+            WebHook.RequestBundle rb = new WebHook.RequestBundle(he.getRequest(), he.getResponse(),
+                    (String[]) ArrayUtils.subarray(requestParts, 2, 1000));
+
             if (!Authorize.path(rb.getRequestURI(), Sessions.getInstance().getSession(req.getSession().getId()).getTicket())) {
                 rb.notAuthorized();
                 return;
             }
 
             // Check if this is a wwscp command (last part equals wwscp)
-            if (requestParts.length != 0  && requestParts[requestParts.length - 1].equals("wwscp")) {
+            if (requestParts.length != 0 && requestParts[requestParts.length - 1].equals("wwscp")) {
                 HttpConnection hc = new HttpConnection(he.getRequest(), he.getResponse());
                 Commander.getInstance().addConnection(hc);
                 hc.handleCommand(Command.parse(IOUtils.toString(he.getRequestBody(), "UTF-8"), hc));
@@ -74,7 +77,13 @@ public class ServerHook {
                 }
                 designatedHook = electHook(he, temp);
                 if (designatedHook == null) {
-                    rb.getBaseRequest().setHandled(false);
+                    if (app != null)
+                    {
+                        // Defer to default application
+                        app.handle(he);
+                    } else {
+                        resp.sendError(404, "Sorry, we have no idea what you want");
+                    }
                     break;
                 }
                 try {
@@ -110,8 +119,13 @@ public class ServerHook {
     }
 
     public ServerHook(String context) {
+        this(context, null);
+    }
+
+    public ServerHook(String context, DefaultApplication app) {
         this.hooks = new ArrayList<>();
         this.context = context;
+        this.app = app;
     }
 
     public WebSocketHandler getWebSocketHandler() {
@@ -128,7 +142,7 @@ public class ServerHook {
             Commander.getInstance().addCommandHandler((CommandHandler) hook);
         }
     }
-    
+
     public void hookIntoServer(Server s) {
         s.addServlet(getHttpHandler());
         s.addServlet(getWebSocketHandler());

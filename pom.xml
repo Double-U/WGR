@@ -12,8 +12,8 @@
         <module>server</module>
         <module>messaging</module>
         <module>services</module>
-    <module>web</module>
-  </modules>
+        <module>web</module>
+    </modules>
     
     <dependencies>
         <dependency>
