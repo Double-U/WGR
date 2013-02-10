@@ -43,7 +43,7 @@ public class MessagingConnection extends Connection {
             // Needs some fixing
             if (!MessagingConnection.this.client.equals(client)) {
                 MessagingConnection.this.client = client;
-                Commander.getInstance().addConnection(MessagingConnection.this);
+                Commander.get().addConnection(MessagingConnection.this);
             }
             handleCommand(Command.parse(message, MessagingConnection.this));
         }
