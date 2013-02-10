@@ -40,7 +40,7 @@ public class Notifier {
 
     public Notifier() {
         scheduler = new Scheduler();
-        Commander.getInstance().addConnectionsListener(new WCPCL());
+        Commander.get().addConnectionsListener(new WCPCL());
         facilities = new ElementsByProxyList<NotificationFacility>();
         facilities.enable(NotificationFacility.class);
         // Always have at least one notification facility, otherwise there will not be any notifying going on any time soon

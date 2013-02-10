@@ -37,7 +37,7 @@ public class Commander {
         this.connectionListeners.enable(ConnectionsListener.class);
     }
 
-    public static Commander getInstance() {
+    public static Commander get() {
         if (instance == null) {
             instance = new Commander();
         }

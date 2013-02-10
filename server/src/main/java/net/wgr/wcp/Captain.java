@@ -24,6 +24,6 @@ public class Captain {
         HttpSession s = request.getSession();
         if (s == null) return;
         targets.add(Sessions.getInstance().getSession(s.getId()).getWCPConnectionId());
-        Commander.getInstance().commandeer(cmd, new Scope(targets));
+        Commander.get().commandeer(cmd, new Scope(targets));
     }
 }

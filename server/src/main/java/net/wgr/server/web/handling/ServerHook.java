@@ -63,7 +63,7 @@ public class ServerHook {
             // Check if this is a wwscp command (last part equals wwscp)
             if (requestParts.length != 0 && requestParts[requestParts.length - 1].equals("wwscp")) {
                 HttpConnection hc = new HttpConnection(he.getRequest(), he.getResponse());
-                Commander.getInstance().addConnection(hc);
+                Commander.get().addConnection(hc);
                 hc.handleCommand(Command.parse(IOUtils.toString(he.getRequestBody(), "UTF-8"), hc));
             }
             // Access control
@@ -139,7 +139,7 @@ public class ServerHook {
     public void addWebHook(WebHook hook) {
         this.hooks.add(hook);
         if (hook instanceof CommandHandler) {
-            Commander.getInstance().addCommandHandler((CommandHandler) hook);
+            Commander.get().addCommandHandler((CommandHandler) hook);
         }
     }
 
@@ -170,7 +170,7 @@ public class ServerHook {
         public void onOpen(Connection connection) {
             this.conn = connection;
             wsc = new WebSocketConnection(request, conn);
-            Commander.getInstance().addConnection(wsc);
+            Commander.get().addConnection(wsc);
         }
 
         @Override
