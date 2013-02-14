@@ -7,6 +7,7 @@
 package net.wgr.wcp.command;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -27,7 +28,7 @@ public class Command {
     protected transient JsonElement data;
     protected HttpServletRequest request;
     protected Connection conn;
-    protected static Gson gson = new Gson();
+    protected static Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 
     public static Command parse(String data, Connection c) {
         JsonParser jp = new JsonParser();
