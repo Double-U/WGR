@@ -52,12 +52,6 @@
             <artifactId>core</artifactId>
             <version>0.9-SNAPSHOT</version>
             <type>jar</type>
-            <exclusions>
-                <exclusion>
-                    <artifactId>servlet-api</artifactId>
-                    <groupId>javax.servlet</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>jmimemagic</groupId>
