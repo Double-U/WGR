@@ -269,7 +269,7 @@ public class DefaultApplication implements Application {
                     file = getBytesFromFile(f);
                 }
 
-                file = tryToDeflate(he, type, file);
+                //file = tryToDeflate(he, type, file);
 
                 he.setResponseHeader("Content-Type", type + "; charset=UTF-8");
                 he.setResponseHeader("Server", "W Application Server");
