@@ -71,14 +71,13 @@ public class ServerHook {
 
             WebHook designatedHook = null;
             ArrayList<WebHook> temp = new ArrayList<>(hooks);
-            while (!rb.getBaseRequest().isHandled() && !temp.isEmpty()) {
+            while (!rb.getBaseRequest().isHandled() && !(temp.isEmpty() && app == null)) {
                 if (designatedHook != null) {
                     temp.remove(designatedHook);
                 }
                 designatedHook = electHook(he, temp);
                 if (designatedHook == null) {
-                    if (app != null)
-                    {
+                    if (app != null) {
                         // Defer to default application
                         app.handle(he);
                     } else {
